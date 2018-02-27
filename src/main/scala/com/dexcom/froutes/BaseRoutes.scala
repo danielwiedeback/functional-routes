@@ -28,7 +28,7 @@ object BaseRoutes {
 
   private val routeHandlingDirective = extract(extractHeadersFromRequest)
 
-  val routes: Route =
+  private val helloRoute: Route =
     path("hello") {
       get {
         routeHandlingDirective { headerString =>
@@ -36,4 +36,13 @@ object BaseRoutes {
         }
       }
     }
+
+  private val integerRoute: Route =
+    path("integer" / IntNumber) { number =>
+      get {
+        complete(s"The number you provided was $number")
+      }
+    }
+
+  def routes: Route = helloRoute ~ integerRoute
 }
