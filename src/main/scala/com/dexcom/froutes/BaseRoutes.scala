@@ -1,5 +1,7 @@
 package com.dexcom.froutes
 
+import java.time.LocalDateTime
+
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server._
 
@@ -31,5 +33,12 @@ object BaseRoutes {
       }
     }
 
-  def routes: Route = helloRoute ~ integerRoute
+  private def timeRoute(baseRepo: BaseRepository): Route =
+    path("uptime") {
+      get {
+        complete(baseRepo.durationFromBoot(LocalDateTime.now()))
+      }
+    }
+
+  def routes(baseRepo: BaseRepository): Route = helloRoute ~ integerRoute ~ timeRoute(baseRepo)
 }
